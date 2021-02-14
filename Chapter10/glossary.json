@@ -1,0 +1,7 @@
+{
+    "Array": "A semi-rigid complex object that holds other variable types",
+    "Conditional": "A term used to refer to a statement that evaluates to true or false for use in 'if' statements and while loops",
+    "Dictionary": "Similar to a KeyValuePair in C#",
+    "If": "A keyword followed by a comparison that evalutes to true or false. See Conditional",
+    "Tuple": "An immutable list"
+}

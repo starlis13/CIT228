@@ -1,0 +1,4 @@
+In Python you can create objects
+In Python you can read files
+In Python you can omit line-ending semicolons
+In Python you can print out lines from a file
