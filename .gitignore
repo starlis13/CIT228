@@ -9,3 +9,12 @@ alien_invasion/__pycache__/settings.cpython-39.pyc
 alien_invasion/__pycache__/ship.cpython-39.pyc
 Chapter11/__pycache__/employee.cpython-39.pyc
 Chapter11/__pycache__/restaurant.cpython-39.pyc
+forest_rogue/__pycache__/alien.cpython-39.pyc
+forest_rogue/__pycache__/bullet.cpython-39.pyc
+forest_rogue/__pycache__/button.cpython-39.pyc
+forest_rogue/__pycache__/enemy.cpython-39.pyc
+forest_rogue/__pycache__/game_stats.cpython-39.pyc
+forest_rogue/__pycache__/playercharacter.cpython-39.pyc
+forest_rogue/__pycache__/scoreboard.cpython-39.pyc
+forest_rogue/__pycache__/settings.cpython-39.pyc
+forest_rogue/__pycache__/ship.cpython-39.pyc
