@@ -10,6 +10,15 @@ from button import Button
 from playercharacter import PlayerCharacter
 from bullet import Bullet
 from enemy import Enemy
+from audiomanager import AudioManager
+
+# Credits:
+# Laser Sprites: https://opengameart.org/content/lasers-and-beams
+# Player Character (Rogue): https://opengameart.org/content/animated-rogue
+# Background (slightly edited): https://opengameart.org/content/small-leaves-texture
+# Laser sound: https://opengameart.org/content/insect-or-alien-scream-short
+# Background Music: https://opengameart.org/content/creepy-forest-f
+# Character death: https://opengameart.org/content/8bit-death-whirl
 
 # A quick note that the working title for this game was "RogueLike_Me"
 # You may see some left-over refactorings that I missed in renaming the main class here
@@ -21,8 +30,9 @@ class ForestRogue:
         self.screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN) 
         self.settings.screen_width = self.screen.get_rect().width 
         self.settings.screen_height = self.screen.get_rect().height
+        self.background = pygame.image.load("images/bg.jpg")
         
-        pygame.display.set_caption("RogueLike Me")
+        pygame.display.set_caption("Forest Rogue")
 
         self.stats = GameStats(self)
         self.sb = Scoreboard(self)
@@ -31,6 +41,8 @@ class ForestRogue:
         self.bullets = pygame.sprite.Group()
         self.enemies = pygame.sprite.Group()
         
+        self.audioManager = AudioManager()
+        self.audioManager.playBackgroundMusic()
         self.play_button = Button (self, "Play")
 
     def run_game(self):
@@ -111,6 +123,7 @@ class ForestRogue:
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self, direction)
             self.bullets.add(new_bullet)
+            self.audioManager.playBlast()
 
     def _update_bullets(self):
         self.bullets.update()
@@ -151,8 +164,12 @@ class ForestRogue:
             self._create_enemies()
             
             self.settings.increase_speed()
-            self.stats.level += 1
-            self.sb.prep_level()
+            
+            if self.stats.level < self.settings.last_level:
+                self.stats.level += 1
+                self.sb.prep_level()
+            else:
+                self.stats.game_active = False
 
     def _update_enemies(self):
         """ Check if enemy is at boundary, update enemy positions """
@@ -169,11 +186,12 @@ class ForestRogue:
 
             self.enemies.empty()
             self.bullets.empty()
-
             self._create_enemies()
+            
             self.playerCharacter.center_playerCharacter()
+            self.audioManager.diePlayer()
 
-            sleep(0.5)
+            sleep(2.2)
         else:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
@@ -182,19 +200,21 @@ class ForestRogue:
         """Create an enemy and place it in the row"""
         if len(self.enemies) <= (2 * self.stats.level):
             for enemyCount in range((2 * self.stats.level)):
-                spawnPositionY = random.randint((-1 * self.settings.screen_height), self.settings.screen_height)
-                spawnPositionX = random.randint((-1 * self.settings.screen_width), self.settings.screen_width)
+                spawnPositionY = random.randint(0, (self.settings.screen_height / 2))
+                spawnPositionX = random.randint(0, (self.settings.screen_width / 2))
                 
                 enemy = Enemy(self)
                 enemy_width, enemy_height = enemy.rect.size
+                
                 enemy.x = spawnPositionX
                 enemy.rect.x = enemy.x
-                enemy.rect.y = spawnPositionY
+                enemy.y = spawnPositionY
+                enemy.rect.y = enemy.y
                 
                 self.enemies.add(enemy)
 
-    def _show_instructions(self):
-        instructionsBaseImage = pygame.image.load('images/instructions.png')
+    def _show_image(self, imageName):
+        instructionsBaseImage = pygame.image.load(imageName)
         instructionRect = instructionsBaseImage.get_rect()
         instructionRect.centerx = self.screen.get_rect().centerx
         instructionRect.centery = self.screen.get_rect().centery
@@ -202,7 +222,7 @@ class ForestRogue:
 
     def _update_screen(self):
         """Update images on the screen and flip to a new screen"""
-        self.screen.fill(self.settings.bg_color)
+        self.screen.blit(self.background, (0, 0))
         self.playerCharacter.blitme()
         
         for bullet in self.bullets.sprites():
@@ -211,9 +231,11 @@ class ForestRogue:
         self.enemies.draw(self.screen)
         self.sb.show_score()
 
-        if not self.stats.game_active:
+        if not self.stats.game_active and self.stats.level < self.settings.last_level:
             self.play_button.draw_button()
-            self._show_instructions()            
+            self._show_image('images/instructions.png')
+        elif not self.stats.game_active and self.stats.level == self.settings.last_level and len(self.sb.playerCharacters) >= 0:
+            self._show_image('images/youwon.png')
             
         pygame.display.flip()
     

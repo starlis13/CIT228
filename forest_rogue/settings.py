@@ -16,6 +16,7 @@ class Settings:
         self.score_scale = 1.5
         #Enemy count to level up
         self.level_threshold = 15
+        self.last_level = 10
 
         self.initialize_dynamic_settings()
 
