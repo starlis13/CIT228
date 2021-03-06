@@ -1,5 +1,4 @@
 class Settings:
-    
     def __init__(self):
         self.screen_width = 800
         self.screen_height = 800
@@ -15,7 +14,6 @@ class Settings:
         self.speedup_scale = 1.0
         self.score_scale = 1.5
         
-        #Enemy count to level up
         self.level_threshold = 15
         self.last_level = 10
 
