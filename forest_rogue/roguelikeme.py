@@ -13,6 +13,7 @@ from enemy import Enemy
 from audiomanager import AudioManager
 
 # Credits:
+# A lot of the base code is mocked from the Crash Course Python book
 # Laser Sprites: https://opengameart.org/content/lasers-and-beams
 # Player Character (Rogue): https://opengameart.org/content/animated-rogue
 # Background (slightly edited): https://opengameart.org/content/small-leaves-texture
@@ -89,34 +90,34 @@ class ForestRogue:
             pygame.mouse.set_visible(False)
             
     def _check_keydown_events(self, event):
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_d:
             self.playerCharacter.moving_right = True
-        elif event.key == pygame.K_LEFT:
+        elif event.key == pygame.K_a:
             self.playerCharacter.moving_left = True
-        elif event.key == pygame.K_UP:
+        elif event.key == pygame.K_w:
             self.playerCharacter.moving_up = True
-        elif event.key == pygame.K_DOWN:
+        elif event.key == pygame.K_s:
             self.playerCharacter.moving_down = True
             
         elif event.key == pygame.K_q:
             sys.exit()
-        elif event.key == pygame.K_w:
+        elif event.key == pygame.K_UP:
             self._fire_in_direction('up')
-        elif event.key == pygame.K_a:
+        elif event.key == pygame.K_LEFT:
             self._fire_in_direction('left')
-        elif event.key == pygame.K_s:
+        elif event.key == pygame.K_DOWN:
             self._fire_in_direction('down')
-        elif event.key == pygame.K_d:
+        elif event.key == pygame.K_RIGHT:
             self._fire_in_direction('right')
 
     def _check_keyup_events(self, event):
-        if event.key == pygame.K_RIGHT:
+        if event.key == pygame.K_d:
             self.playerCharacter.moving_right = False
-        elif event.key == pygame.K_LEFT:
+        elif event.key == pygame.K_a:
             self.playerCharacter.moving_left = False
-        elif event.key == pygame.K_UP:
+        elif event.key == pygame.K_w:
             self.playerCharacter.moving_up = False
-        elif event.key == pygame.K_DOWN:
+        elif event.key == pygame.K_s:
             self.playerCharacter.moving_down = False
     
     def _fire_in_direction(self, direction):
@@ -158,16 +159,16 @@ class ForestRogue:
         # Reset game condition
         if self.sb.enemies_killed >= self.settings.level_threshold:
             self.sb.enemies_killed = 0
-            self.enemies.empty()
-            self.bullets.empty()
+            #self.enemies.empty()
+            #self.bullets.empty()
             
-            self._create_enemies()
+            #self._create_enemies()
             
             self.settings.increase_speed()
             
             if self.stats.level < self.settings.last_level:
                 self.stats.level += 1
-                self.sb.prep_level()
+                #self.sb.prep_level()
             else:
                 self.stats.game_active = False
 
