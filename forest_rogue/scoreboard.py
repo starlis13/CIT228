@@ -5,13 +5,13 @@ from playercharacter import PlayerCharacter
 class Scoreboard:
     """A class to handle scoring"""
 
-    def __init__(self, ai_game):
+    def __init__(self, rlm_game):
         """Initialize scoreboard fields"""
-        self.ai_game = ai_game
-        self.screen = ai_game.screen
+        self.rlm_game = rlm_game
+        self.screen = rlm_game.screen
         self.screen_rect = self.screen.get_rect()
-        self.settings = ai_game.settings
-        self.stats = ai_game.stats
+        self.settings = rlm_game.settings
+        self.stats = rlm_game.stats
         self.enemies_killed = 0
 
         # Font settings for scoring info
@@ -76,7 +76,7 @@ class Scoreboard:
         """Display number of playerCharacters remaining"""
         self.playerCharacters = Group()
         for playerCharacter_number in range(self.stats.playerCharacters_left):
-            playerCharacter = PlayerCharacter(self.ai_game)
+            playerCharacter = PlayerCharacter(self.rlm_game)
             playerCharacter.rect.x = 10 + playerCharacter_number * playerCharacter.rect.width
             playerCharacter.rect.y = 10
             self.playerCharacters.add(playerCharacter)

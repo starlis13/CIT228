@@ -46,6 +46,7 @@ class ForestRogue:
         self.audioManager.playBackgroundMusic()
         self.play_button = Button (self, "Play")
 
+
     def run_game(self):
         while True:
             self._check_events()
@@ -56,6 +57,7 @@ class ForestRogue:
                 self._update_enemies()
                 
             self._update_screen()
+
 
     def _check_events(self):
         for event in pygame.event.get():
@@ -70,6 +72,7 @@ class ForestRogue:
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 self._check_play_button(mouse_pos)
+
 
     def _check_play_button(self, mouse_pos):
         button_clicked = self.play_button.rect.collidepoint(mouse_pos)
@@ -88,6 +91,7 @@ class ForestRogue:
             
             self.playerCharacter.center_playerCharacter()
             pygame.mouse.set_visible(False)
+            
             
     def _check_keydown_events(self, event):
         if event.key == pygame.K_d:
@@ -110,6 +114,7 @@ class ForestRogue:
         elif event.key == pygame.K_RIGHT:
             self._fire_in_direction('right')
 
+
     def _check_keyup_events(self, event):
         if event.key == pygame.K_d:
             self.playerCharacter.moving_right = False
@@ -120,16 +125,16 @@ class ForestRogue:
         elif event.key == pygame.K_s:
             self.playerCharacter.moving_down = False
     
+    
     def _fire_in_direction(self, direction):
         if len(self.bullets) < self.settings.bullets_allowed:
             new_bullet = Bullet(self, direction)
             self.bullets.add(new_bullet)
             self.audioManager.playBlast()
 
+
     def _update_bullets(self):
         self.bullets.update()
-
-        # Clear ammo when it leaves the screen (maintain memory)
         for bullet in self.bullets.copy():
             if bullet.direction == 'up' and bullet.rect.bottom <= 0:
                 self.bullets.remove(bullet)
@@ -141,11 +146,10 @@ class ForestRogue:
                 self.bullets.remove(bullet)
 
         self._check_bullet_enemy_collisions()
+                        
 
     def _check_bullet_enemy_collisions(self):
-        """Respond to bullet-enemy collisions"""
-        collisions = pygame.sprite.groupcollide(
-                self.bullets, self.enemies, True, True)
+        collisions = pygame.sprite.groupcollide(self.bullets, self.enemies, True, True)
 
         if collisions:
             for enemies in collisions.values():
@@ -156,31 +160,24 @@ class ForestRogue:
             self.sb.check_high_score()
             self._create_enemies()
 
-        # Reset game condition
         if self.sb.enemies_killed >= self.settings.level_threshold:
             self.sb.enemies_killed = 0
-            #self.enemies.empty()
-            #self.bullets.empty()
-            
-            #self._create_enemies()
-            
             self.settings.increase_speed()
             
             if self.stats.level < self.settings.last_level:
                 self.stats.level += 1
-                #self.sb.prep_level()
             else:
                 self.stats.game_active = False
 
+
     def _update_enemies(self):
-        """ Check if enemy is at boundary, update enemy positions """
         self.enemies.update(self.playerCharacter)
 
         if pygame.sprite.spritecollideany(self.playerCharacter, self.enemies):
             self._playerCharacter_hit()
 
+
     def _playerCharacter_hit(self):
-        """ Handle playerCharacter collision """
         if self.stats.playerCharacters_left > 0:
             self.stats.playerCharacters_left -= 1
             self.sb.prep_playerCharacters()
@@ -197,8 +194,8 @@ class ForestRogue:
             self.stats.game_active = False
             pygame.mouse.set_visible(True)
 
+
     def _create_enemies(self):
-        """Create an enemy and place it in the row"""
         if len(self.enemies) <= (2 * self.stats.level):
             for enemyCount in range((2 * self.stats.level)):
                 spawnPositionY = random.randint(0, (self.settings.screen_height / 2))
@@ -214,6 +211,7 @@ class ForestRogue:
                 
                 self.enemies.add(enemy)
 
+
     def _show_image(self, imageName):
         instructionsBaseImage = pygame.image.load(imageName)
         instructionRect = instructionsBaseImage.get_rect()
@@ -221,8 +219,8 @@ class ForestRogue:
         instructionRect.centery = self.screen.get_rect().centery
         self.screen.blit(instructionsBaseImage, instructionRect)
 
+
     def _update_screen(self):
-        """Update images on the screen and flip to a new screen"""
         self.screen.blit(self.background, (0, 0))
         self.playerCharacter.blitme()
         
