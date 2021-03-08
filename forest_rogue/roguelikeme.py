@@ -166,6 +166,7 @@ class ForestRogue:
             
             if self.stats.level < self.settings.last_level:
                 self.stats.level += 1
+                self.sb.prep_level()
             else:
                 self.stats.game_active = False
 
